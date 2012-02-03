@@ -5,14 +5,12 @@ import (
 )
 
 type Registry struct {
-	config  Config
 	mu      sync.Mutex
 	entries map[string]func() interface{}
 }
 
-func newRegistry(c Config) *Registry {
+func newRegistry() *Registry {
 	return &Registry{
-		config:  c,
 		entries: make(map[string]func() interface{}),
 	}
 }
