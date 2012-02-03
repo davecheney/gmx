@@ -2,9 +2,9 @@ package gmx
 
 import (
 	"fmt"
-        _log "log"
+	_log "log"
 	"net"
-        "os"
+	"os"
 )
 
 var log = _log.New(os.Stderr, "gmx: ", 0)
@@ -28,11 +28,11 @@ func init() {
 // localSocket returns a net.Conn connected to the 
 // local unix domain socket for the running gmx process
 func localSocket() (net.Listener, error) {
-        path := fmt.Sprintf("/tmp/.gmx.%d.0", os.Getpid())
-        return net.ListenUnix("unix", &net.UnixAddr{
-                path,
-                "unix",
-        })
+	path := fmt.Sprintf("/tmp/.gmx.%d.0", os.Getpid())
+	return net.ListenUnix("unix", &net.UnixAddr{
+		path,
+		"unix",
+	})
 }
 
 // Register assocaites the name with the function f. f may
