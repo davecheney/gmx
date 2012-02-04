@@ -15,19 +15,18 @@ func newRegistry() *Registry {
 	}
 }
 
-func (r *Registry) register(name string, getter func() interface{}) {
+func (r *Registry) register(key string, f func() interface{}) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	r.entries[name] = getter
-	log.Printf("register: %s, %#v", name, getter)
+	r.entries[key] = f
 }
 
 var nilfunc = func() interface{} { return nil }
 
-func (r *Registry) getter(name string) func() interface{} {
+func (r *Registry) value(key string) func() interface{} {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	f, ok := r.entries[name]
+	f, ok := r.entries[key]
 	if !ok {
 		return nilfunc
 	}

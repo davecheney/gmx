@@ -9,18 +9,16 @@ import (
 
 func serve(l net.Listener, r *Registry) {
 	go func() {
-		// if listener is a unix socket, clean it up
+		// if listener is a unix socket, delete it on shutdown
 		if l, ok := l.(*net.UnixListener); ok {
 			if a, ok := l.Addr().(*net.UnixAddr); ok {
 				defer os.Remove(a.Name)
 			}
 		}
 		defer l.Close()
-		log.Printf("listening on %v", l)
 		for {
 			c, err := l.Accept()
 			if err != nil {
-				log.Printf("%v exited with %v", l, err)
 				return
 			}
 			go handle(c, r)
@@ -37,8 +35,9 @@ func handle(c net.Conn, reg *Registry) {
 		if err != nil {
 			return
 		}
-		if err := w.Encode(reg.getter(string(v))()); err != nil {
-			log.Printf("%v, unable to write %v", c, err)
+		if err := w.Encode(reg.value(string(v))()); err != nil {
+			// close connection on error
+			return
 		}
 	}
 }

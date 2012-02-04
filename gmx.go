@@ -7,6 +7,8 @@ import (
 	"os"
 )
 
+const GMX_VERSION = 0
+
 var log = _log.New(os.Stderr, "gmx: ", 0)
 
 var registry = newRegistry()
@@ -18,21 +20,22 @@ func init() {
 		return
 	}
 
-	// register this registry for discovery
+	// register the registries keys for discovery
 	Register("registry", func() interface{} {
 		return registry.keys()
 	})
 	serve(s, registry)
 }
 
-// localSocket returns a net.Conn connected to the 
-// local unix domain socket for the running gmx process
 func localSocket() (net.Listener, error) {
-	path := fmt.Sprintf("/tmp/.gmx.%d.0", os.Getpid())
-	return net.ListenUnix("unix", &net.UnixAddr{
-		path,
+	return net.ListenUnix("unix", localSocketAddr())
+}
+
+func localSocketAddr() *net.UnixAddr {
+	return &net.UnixAddr {
+		fmt.Sprintf("/tmp/.gmx.%d.%d", os.Getpid(), GMX_VERSION),
 		"unix",
-	})
+	}
 }
 
 // Register assocaites the name with the function f. f may
