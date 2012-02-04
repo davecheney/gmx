@@ -32,9 +32,9 @@ The names of registered keys are registered with the key `registry`. If there is
 
 For convenience a client is included in the gmxc sub directory. Please consult the README in that directory for more details.
 
-## Registering gmx entries
+## Registering gmx keys
 
-New entries can be registerd using the `Register` function
+New keys can be registered using the `Register` function
 
 	gmx.Register(key string, f func() interface{})
 
