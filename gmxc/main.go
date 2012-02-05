@@ -9,7 +9,7 @@ import (
 	"os"
 	"regexp"
 	"time"
-//	"strings"
+	//	"strings"
 )
 
 var (
@@ -58,7 +58,7 @@ func listGmxProcesses() {
 				log.Printf("unable to decode response from %s: %v", pid, err)
 				continue
 			}
-			if args, ok := result["os.args"] ; ok {
+			if args, ok := result["os.args"]; ok {
 				fmt.Printf("%s\t%q\n", pid, args)
 			}
 		}

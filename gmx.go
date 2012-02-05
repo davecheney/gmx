@@ -12,7 +12,7 @@ import (
 const GMX_VERSION = 0
 
 var (
-	r   = &registry{
+	r = &registry{
 		entries: make(map[string]func() interface{}),
 	}
 )
@@ -70,15 +70,15 @@ func handle(nc net.Conn, reg *registry) {
 		*json.Encoder
 		*json.Decoder
 	}
-	c := conn {
+	c := conn{
 		nc,
 		json.NewEncoder(nc),
 		json.NewDecoder(nc),
-	}	
+	}
 	defer c.Close()
 	for {
 		var keys []string
-		if err := c.Decode(&keys) ; err != nil {
+		if err := c.Decode(&keys); err != nil {
 			log.Printf("gmx: client %v send invalid json request: %v", c.RemoteAddr(), err)
 			return
 		}
@@ -97,8 +97,8 @@ func handle(nc net.Conn, reg *registry) {
 }
 
 type registry struct {
-        sync.Mutex // protects entries from concurrent mutation
-        entries    map[string]func() interface{}
+	sync.Mutex // protects entries from concurrent mutation
+	entries    map[string]func() interface{}
 }
 
 func (r *registry) register(key string, f func() interface{}) {
