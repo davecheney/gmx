@@ -3,6 +3,7 @@ package gmx
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"os"
@@ -80,7 +81,9 @@ func handle(nc net.Conn, reg *registry) {
 	for {
 		var keys []string
 		if err := c.Decode(&keys); err != nil {
-			log.Printf("gmx: client %v sent invalid json request: %v", c.RemoteAddr(), err)
+			if err != io.EOF {
+				log.Printf("gmx: client %v sent invalid json request: %v", c.RemoteAddr(), err)
+			}
 			return
 		}
 		var result = make(map[string]interface{})
