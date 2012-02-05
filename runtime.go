@@ -3,22 +3,16 @@ package gmx
 import "runtime"
 
 func init() {
-	Register("runtime.gomaxprocs", runtimeGOMAXPROCS)
-	Register("runtime.memstats", runtimeMemstats)
-	Register("runtime.cgocalls", runtimeCgocalls)
-	Register("runtime.numcpu", runtimeNumCPU)
-	Register("runtime.version", runtimeVersion)
-}
+	Publish("runtime.gomaxprocs", runtimeGOMAXPROCS)
+	Publish("runtime.cgocalls", runtimeCgocalls)
+	Publish("runtime.numcpu", runtimeNumCPU)
+	Publish("runtime.version", runtimeVersion)
 
-// support functions
+	Publish("runtime.memstats.alloc", runtimeMemStatsAlloc)
+}
 
 func runtimeGOMAXPROCS() interface{} {
 	return runtime.GOMAXPROCS(0)
-}
-
-func runtimeMemstats() interface{} {
-	runtime.UpdateMemStats()
-	return runtime.MemStats
 }
 
 func runtimeCgocalls() interface{} {
@@ -31,4 +25,9 @@ func runtimeNumCPU() interface{} {
 
 func runtimeVersion() interface{} {
 	return runtime.Version()
+}
+
+func runtimeMemStatsAlloc() interface{} {
+	runtime.UpdateMemStats()
+	return runtime.MemStats.Alloc
 }
