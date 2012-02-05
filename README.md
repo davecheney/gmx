@@ -38,4 +38,4 @@ New keys can be registered using the `Publish` function
 
 ## Runtime instrumentation
 
-By default gmx instruments the `runtime` package, refer to the `runtime.go` source for more details.
+By default gmx instruments selected values from the  `runtime` and `os` packages, refer to the `runtime.go` and `os.go` source for more details.
