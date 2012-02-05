@@ -19,4 +19,4 @@ The default invocation of `gmxc` will list the accessible gmx enabled processes 
 ### Listing all gmx values
 
 	% ./gmxc -p 16207 keys
-	keys: [keys runtime.memstats.alloc runtime.gomaxprocs runtime.version os.args runtime.numcpu runtime.cgocalls]
+	keys: [keys runtime.memstats runtime.gomaxprocs runtime.version os.args runtime.numcpu runtime.cgocalls]

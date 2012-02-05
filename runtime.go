@@ -1,5 +1,7 @@
 package gmx
 
+// pkg/runtime instrumentation
+
 import "runtime"
 
 func init() {
@@ -8,7 +10,7 @@ func init() {
 	Publish("runtime.numcpu", runtimeNumCPU)
 	Publish("runtime.version", runtimeVersion)
 
-	Publish("runtime.memstats.alloc", runtimeMemStatsAlloc)
+	Publish("runtime.memstats", runtimeMemStats)
 }
 
 func runtimeGOMAXPROCS() interface{} {
@@ -27,7 +29,7 @@ func runtimeVersion() interface{} {
 	return runtime.Version()
 }
 
-func runtimeMemStatsAlloc() interface{} {
+func runtimeMemStats() interface{} {
 	runtime.UpdateMemStats()
-	return runtime.MemStats.Alloc
+	return runtime.MemStats
 }

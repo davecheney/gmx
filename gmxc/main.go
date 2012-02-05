@@ -59,7 +59,7 @@ func listGmxProcesses() {
 				continue
 			}
 			if args, ok := result["os.args"]; ok {
-				fmt.Printf("%s\t%q\n", pid, args)
+				fmt.Printf("%s\t%v\n", pid, args)
 			}
 		}
 	}
