@@ -48,7 +48,7 @@ func Publish(key string, f func() interface{}) {
 }
 
 func serve(l net.Listener, r *registry) {
-	// if listener is a unix socket, delete it on shutdown
+	// if listener is a unix socket, try to delete it on shutdown
 	if l, ok := l.(*net.UnixListener); ok {
 		if a, ok := l.Addr().(*net.UnixAddr); ok {
 			defer os.Remove(a.Name)
@@ -65,6 +65,7 @@ func serve(l net.Listener, r *registry) {
 }
 
 func handle(nc net.Conn, reg *registry) {
+	// conn makes it easier to send and receive json
 	type conn struct {
 		net.Conn
 		*json.Encoder
@@ -79,18 +80,18 @@ func handle(nc net.Conn, reg *registry) {
 	for {
 		var keys []string
 		if err := c.Decode(&keys); err != nil {
-			log.Printf("gmx: client %v send invalid json request: %v", c.RemoteAddr(), err)
+			log.Printf("gmx: client %v sent invalid json request: %v", c.RemoteAddr(), err)
 			return
 		}
 		var result = make(map[string]interface{})
 		for _, key := range keys {
 			if f, ok := reg.value(key); ok {
+				// invoke the function for key and store the result
 				result[key] = f()
 			}
 		}
 		if err := c.Encode(result); err != nil {
 			log.Printf("gmx: could not send response to client %v: %v", c.RemoteAddr(), err)
-			// close connection on error
 			return
 		}
 	}
