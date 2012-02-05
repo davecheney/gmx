@@ -6,7 +6,7 @@ Install the gmxc client
 
 Install this example 
 
-        go get github.com/davecheney/gmx/example/helloworld
+	go get github.com/davecheney/gmx/example/helloworld
 
 Run the example in the background
 
