@@ -6,40 +6,36 @@
 
 ## Getting started
 
-Integrating gmx into your application is as simple as importing the package in your main package via the side effect operator.
+Instrumenting you application with gmx is a simple as importing the `gmx` package in your `main` package via the side effect operator.
 
 	package main
 
 	import _ "github.com/davecheney/gmx"
 
-By default gmx opens a unix socket in /tmp, the name of the socket is
+By default gmx opens a unix socket in `/tmp`, the name of the socket is
 
-	/tmp/.gmx.$PID.$VERSION
+	/tmp/.gmx.$PID.0
 
 ## Protocol version 0
 
 The current protocol version is 0, which is a simple JSON based protocol. You can communicate with the gmx socket using a tool like socat.
 
-	socat UNIX-CONNECT:/tmp/.gmx.12345.0 stdin
+	% socat UNIX-CONNECT:/tmp/.gmx.$(pgrep godoc).0 stdin
+	["runtime.version", "runtime.numcpu"]
+	{"runtime.numcpu":4,"runtime.version":"weekly.2012-01-27 11688+"}
      
-Requests are the names of registered keys, the results are json encoded
+The request is a json array of strings representing keys that you wish to query. The result is a json map, the keys of that map are keys that matched the keys in your request. The value of the entry will be the result of the published function, encoded in json. If there is no matching key registered, no entry will appear in the result map.
 
-	% socat UNIX-CONNECT:/tmp/.gmx.9328.0 stdin
-	runtime.gomaxprocs 
-	1
-
-The names of registered keys are registered with the key `registry`. If there is no value registered then the json encoding of nil will be returned.
-
-For convenience a client is included in the gmxc sub directory. Please consult the README in that directory for more details.
+For convenience a client is included in the gmxc sub directory. Please consult the `README` in that directory for more details.
 
 ## Registering gmx keys
 
-New keys can be registered using the `Register` function
+New keys can be registered using the `Publish` function
 
-	gmx.Register(key string, f func() interface{})
+	gmx.Publish(key string, f func() interface{})
 
-`f` can be any function that returns a json encodable result. `f` is executed whenever its key is invoked, responsibility for ensuring the function is thread safe is the responsibility of the programmer.
+`f` can be any function that returns a json encodable result. `f` is executed whenever its key is invoked, responsibility for ensuring the function is thread safe rests with the author of `f`.
 
 ## Runtime instrumentation
 
-By default gmx registers a number of values under the runtime key, refer to the runtime.go source for more details.
+By default gmx instruments the `runtime` package, refer to the `runtime.go` source for more details.
