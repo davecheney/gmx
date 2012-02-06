@@ -7,9 +7,9 @@ import (
 	"log"
 	"net"
 	"os"
+	"path/filepath"
 	"regexp"
 	"time"
-	//	"strings"
 )
 
 var (
@@ -37,9 +37,9 @@ func dial(addr string) (*conn, error) {
 }
 
 func listGmxProcesses() {
-	dir, err := os.Open("/tmp")
+	dir, err := os.Open(os.TempDir())
 	if err != nil {
-		log.Fatalf("unable to open /tmp: %v", err)
+		log.Fatalf("unable to open %s: %v", os.TempDir(), err)
 	}
 	pids, err := dir.Readdirnames(0)
 	if err != nil {
@@ -47,7 +47,7 @@ func listGmxProcesses() {
 	}
 	for _, pid := range pids {
 		if socketregex.MatchString(pid) {
-			c, err := dial(fmt.Sprintf("/tmp/%s", pid))
+			c, err := dial(filepath.Join(os.TempDir(), pid))
 			if err != nil {
 				continue
 			}
@@ -88,7 +88,7 @@ func main() {
 		listGmxProcesses()
 		return
 	}
-	c, err := dial(fmt.Sprintf("/tmp/.gmx.%d.0", *pid))
+	c, err := dial(filepath.Join(os.TempDir(), fmt.Sprintf(".gmx.%d.0", *pid)))
 	if err != nil {
 		log.Fatalf("unable to connect to process %d: %v", *pid, err)
 	}
