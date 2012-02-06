@@ -7,7 +7,7 @@ import (
 	"log"
 	"net"
 	"os"
-	"path"
+	"path/filepath"
 	"sync"
 )
 
@@ -39,7 +39,7 @@ func localSocket() (net.Listener, error) {
 
 func localSocketAddr() *net.UnixAddr {
 	return &net.UnixAddr{
-		path.Join(os.TempDir(), fmt.Sprintf(".gmx.%d.%d", os.Getpid(), GMX_VERSION)),
+		filepath.Join(os.TempDir(), fmt.Sprintf(".gmx.%d.%d", os.Getpid(), GMX_VERSION)),
 		"unix",
 	}
 }
