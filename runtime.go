@@ -4,6 +4,8 @@ package gmx
 
 import "runtime"
 
+var memstats runtime.MemStats
+
 func init() {
 	Publish("runtime.gomaxprocs", runtimeGOMAXPROCS)
 	Publish("runtime.cgocalls", runtimeCgocalls)
@@ -30,6 +32,6 @@ func runtimeVersion() interface{} {
 }
 
 func runtimeMemStats() interface{} {
-	runtime.UpdateMemStats()
-	return runtime.MemStats
+	runtime.ReadMemStats(&memstats)
+	return memstats
 }
