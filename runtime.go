@@ -8,8 +8,9 @@ var memstats runtime.MemStats
 
 func init() {
 	Publish("runtime.gomaxprocs", runtimeGOMAXPROCS)
-	Publish("runtime.cgocalls", runtimeCgocalls)
+	Publish("runtime.numcgocall", runtimeNumCgoCall)
 	Publish("runtime.numcpu", runtimeNumCPU)
+	Publish("runtime.numgoroutine", runtimeNumGoroutine)
 	Publish("runtime.version", runtimeVersion)
 
 	Publish("runtime.memstats", runtimeMemStats)
@@ -19,12 +20,16 @@ func runtimeGOMAXPROCS() interface{} {
 	return runtime.GOMAXPROCS(0)
 }
 
-func runtimeCgocalls() interface{} {
-	return runtime.Cgocalls()
+func runtimeNumCgoCall() interface{} {
+	return runtime.NumCgoCall()
 }
 
 func runtimeNumCPU() interface{} {
 	return runtime.NumCPU()
+}
+
+func runtimeNumGoroutine() interface{} {
+	return runtime.NumGoroutine()
 }
 
 func runtimeVersion() interface{} {
