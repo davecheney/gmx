@@ -94,7 +94,7 @@ func main() {
 	}
 	defer c.Close()
 
-	// match flag.Args() as regexps 
+	// match flag.Args() as regexps
 	registeredKeys := fetchKeys(c)
 	var keys []string
 	for _, a := range flag.Args() {

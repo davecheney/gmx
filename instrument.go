@@ -17,26 +17,25 @@ func NewCounter(name string) *counter {
 	Publish(name, func() interface{} {
 		return c.value
 	})
-	return c	
+	return c
 }
-	
-type guage struct {
+
+type gauge struct {
 	value int64
 }
 
-func (g *guage) Inc() {
+func (g *gauge) Inc() {
 	atomic.AddInt64(&g.value, 1)
 }
 
-func (g *guage) Dec() {
+func (g *gauge) Dec() {
 	atomic.AddInt64(&g.value, -1)
 }
 
-func NewGuage(name string) *guage {
-	g := new(guage)
+func NewGauge(name string) *gauge {
+	g := new(gauge)
 	Publish(name, func() interface{} {
 		return g.value
 	})
-	return g	
+	return g
 }
-	
