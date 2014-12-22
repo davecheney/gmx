@@ -6,7 +6,7 @@
 
 ## Getting started
 
-Instrumenting you application with gmx is a simple as importing the `gmx` package in your `main` package via the side effect operator.
+Instrumenting your application with gmx is as simple as importing the `gmx` package in your `main` package via the side effect operator.
 
 	package main
 
