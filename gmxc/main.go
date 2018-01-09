@@ -100,7 +100,7 @@ func main() {
 	for _, a := range flag.Args() {
 		r, err := regexp.Compile(a)
 		if err != nil {
-			log.Fatal("unable to compile regex %v: %v", a, err)
+			log.Fatalf("unable to compile regex %v: %v", a, err)
 		}
 		for _, k := range registeredKeys {
 			if r.MatchString(k) {
